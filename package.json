@@ -8,10 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4"
+    "@uivjs/vue-markdown-preview": "^1.0.5",
+    "turndown": "^7.1.2",
+    "vue": "^3.3.4",
+    "vue-markdown": "^2.2.4",
+    "vue-markdown-render": "^2.1.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
+    "sass": "^1.69.5",
     "vite": "^4.4.11"
   }
 }

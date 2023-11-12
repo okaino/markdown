@@ -1,47 +1,68 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script>
+import VueMarkdown from 'vue-markdown-render'
+import turndown from 'turndown';
+const td = new turndown();
+
+export default {
+  components: {
+    VueMarkdown,
+  },
+  data() {
+    return {
+      markdown:"",
+    }
+  },
+  methods: {
+    saveFile() {
+      const markdownComponent = this.$refs.markdownComponent;
+      const renderedHTML = markdownComponent.$el.innerHTML;
+
+      const markdown = td.turndown(renderedHTML);
+
+      const blob = new Blob([markdown], { type: 'text/plain' });
+
+      const a = document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'markdown_rendered_content.md';
+      a.click();
+
+      window.URL.revokeObjectURL(a.href);
+      
+    },
+  }
+} 
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <div class="editor">
+    <h1>Markdown</h1>
+    <textarea name="editor" v-model="markdown"></textarea>
+  </div>
+  
+  <div class="output">
+    <vue-markdown ref="markdownComponent" :source="markdown"></vue-markdown>
+  </div>
+<button @click="saveFile">click me</button>
 
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+
+textarea {
+  height: 800px;
+  width: 700px;
+  resize: none;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.output {
+  background-color: white;
+  height: 800px;
+  width: 700px;
+  margin-top: 10%;
+  margin-left: 10%;
+  resize: none;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
